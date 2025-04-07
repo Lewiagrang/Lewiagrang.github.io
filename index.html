@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Доступный Чат (Темная тема + Сохранение + Дальтоники + Адаптив)</title>
+    <title>Доступный Чат (Темная Тема + Сохранение + Дальтоники + Мобильный)</title>
     <style>
-        /* Общие стили (применяются ко всем устройствам) */
+        /* Общие стили */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #121212;
-            color: #e0e0e0;	
+            color: #e0e0e0;
         }
 
         .chat-container {
@@ -21,9 +21,10 @@
             background-color: #1e1e1e;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             border-radius: 5px;
-            display: flex;
-            flex-direction: column;
-            min-height: 500px;
+            overflow: hidden;
+            display: flex; /* Используем flexbox для удобства расположения элементов */
+            flex-direction: column; /* Располагаем элементы вертикально */
+            height: calc(100vh - 40px); /* Занимаем всю высоту экрана минус отступы */
         }
 
         header {
@@ -37,8 +38,8 @@
 
         main {
             padding: 10px;
-            overflow-y: auto;
-            flex-grow: 1;
+            overflow-y: scroll;
+            flex-grow: 1; /* Позволяем main занимать все доступное пространство по высоте */
         }
 
         .message {
@@ -102,32 +103,31 @@
             outline: 2px solid #ffcc00;
         }
 
-        /* Кнопки доступности (фиксированное положение) */
+        /* Кнопки доступности */
         .accessibility-button, .listen-button, .daltonize-button {
             position: fixed;
-            top: 0;
             background-color: #333;
             color: #fff;
             border: none;
-            padding: 5px 8px;
-            border-radius: 0;
+            padding: 10px 15px;
+            border-radius: 5px;
             cursor: pointer;
             z-index: 1000;
-            font-size: 0.7em;
-            width: 33.33%; /* Занимают 1/3 ширины */
-            text-align: center;
         }
 
         .accessibility-button {
-            left: 0;
+            top: 20px;
+            left: 20px;
         }
 
         .listen-button {
-            left: 33.33%;
+            top: 20px;
+            right: 20px;
         }
 
         .daltonize-button {
-            left: 66.66%;
+            top: 70px;
+            right: 20px;
         }
 
         /* Стили для дальтоников */
@@ -144,41 +144,61 @@
         }
 
         /* Медиа-запрос для мобильных устройств */
-        @media (max-width: 768px) {
+        @media (max-width: 600px) {
             .chat-container {
-                max-width: 100%;
-                margin: 0;
-                border: none;
-                border-radius: 0;
-                min-height: 100vh;
-                box-shadow: none;
+                margin: 0; /* Убираем отступы по бокам */
+                border: none; /* Убираем рамку */
+                border-radius: 0; /* Убираем скругление углов */
+                width: 100%; /* Занимаем всю ширину экрана */
+                height: 100vh; /* Занимаем всю высоту экрана */
+                box-shadow: none; /* Убираем тень */
             }
 
             header {
-                font-size: 1.1em;
+                font-size: 1.1em; /* Немного уменьшаем размер шрифта заголовка */
             }
 
             main {
-                padding: 5px;
+                padding: 5px; /* Уменьшаем отступы */
             }
 
             .input-area {
-                flex-direction: column;
-                padding: 5px;
+                flex-direction: column; /* Располагаем поле ввода и кнопку отправки вертикально */
+                padding: 5px; /* Уменьшаем отступы */
             }
 
             .chat-input {
-                margin-right: 0;
-                margin-bottom: 5px;
+                margin-right: 0; /* Убираем отступ справа */
+                margin-bottom: 5px; /* Добавляем отступ снизу */
+            }
+
+            .accessibility-button, .listen-button, .daltonize-button {
+                font-size: 0.9em; /* Уменьшаем размер шрифта кнопок */
+                padding: 8px 12px; /* Уменьшаем отступы кнопок */
+            }
+
+            .accessibility-button {
+                top: 10px; /* Изменяем позиционирование кнопок */
+                left: 10px;
+            }
+
+            .listen-button {
+                top: 10px;
+                right: 10px;
+            }
+
+            .daltonize-button {
+                top: 50px;
+                right: 10px;
             }
         }
     </style>
 </head>
 <body>
 
-<button class="accessibility-button" id="accessibilityButton">Контраст</button>
-<button class="listen-button" id="listenButton">Прослушать</button>
-<button class="daltonize-button" id="daltonizeButton">Дальтоники</button>
+<button class="accessibility-button" id="accessibilityButton">Включить высокую контрастность</button>
+<button class="listen-button" id="listenButton">Прослушать сообщения</button>
+<button class="daltonize-button" id="daltonizeButton">Фильтр для дальтоников</button>
 
 <div class="chat-container">
     <header>Доступный Чат</header>
@@ -237,12 +257,12 @@
     accessibilityButton.addEventListener('click', function() {
         document.body.classList.toggle('high-contrast');
         if (document.body.classList.contains('high-contrast')) {
-            accessibilityButton.textContent = 'Выключить контраст';
+            accessibilityButton.textContent = 'Выключить высокую контрастность';
             document.body.style.backgroundColor = '#fff';
             document.body.style.color = '#000'
 
         } else {
-            accessibilityButton.textContent = 'Включить контраст';
+            accessibilityButton.textContent = 'Включить высокую контрастность';
             document.body.style.backgroundColor = '#121212';
             document.body.style.color = '#e0e0e0';
         }
@@ -264,9 +284,9 @@
         if (daltonizeClass) {
             document.body.classList.toggle(daltonizeClass);
             if (document.body.classList.contains(daltonizeClass)) {
-                daltonizeButton.textContent = `Выключить фильтр`;
+                daltonizeButton.textContent = `Выключить ${daltonizeClass}`;
             } else {
-                daltonizeButton.textContent = 'Включить фильтр';
+                daltonizeButton.textContent = 'Фильтр для дальтоников';
             }
         }
     });
